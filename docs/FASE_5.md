@@ -10,9 +10,8 @@ Abre una terminal en la carpeta del proyecto y ejecuta:
 
 Cuando aparezca `Started IntercampusApplication`, abre http://localhost:8080.
 Mantén la terminal abierta. Para detener la aplicación pulsa Ctrl+C.
-El script usa las dependencias Maven que ya están instaladas, en modo offline.
-Si faltan dependencias en otra computadora con acceso a internet, ejecuta
-`./mvnw spring-boot:run` para descargarlas.
+El script permite descargar las dependencias Maven que falten; la primera
+ejecución después de añadir dependencias necesita conexión a internet.
 
 Los cambios hechos en la interfaz se guardan en `data/intercampus.mv.db`.
 No borres ese archivo si quieres conservarlos. Los datos de ejemplo se cargan
@@ -148,3 +147,7 @@ Verificación del panel: **37 pruebas aprobadas, 0 fallos, 0 errores**. Incluye 
 flujo web real, historial no vacío, rechazo de confirmaciones inválidas, cambio
 de modo y actualización de H2 con observaciones antiguas. JavaScript verificado
 con `node --check`. Sigue pendiente la revisión visual manual en navegador.
+
+Actualización de permisos: ver docs/PERMISOS.md. La validación final de
+seguridad fue correcta: 43 pruebas aprobadas. El usuario ya autorizó publicar;
+faltan las conexiones con GitHub/Render para completar el despliegue.

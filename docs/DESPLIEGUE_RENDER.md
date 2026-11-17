@@ -1,5 +1,9 @@
 # Publicar Avance 2 en Render
 
+> El usuario volvió a autorizar la publicación. Falta acceso a GitHub/Render
+> desde esta sesión. Los nuevos permisos están en docs/PERMISOS.md. La imagen
+> exige pasar las pruebas antes de publicarse; aún no hay despliegue confirmado.
+
 La configuración está preparada para una demostración gratuita con Java 17,
 Spring Boot, Thymeleaf y H2, con tres campus y tres buses. Docker compila el
 proyecto en un contenedor Maven y ejecuta el JAR con Java 17, sin instalar Java
@@ -39,8 +43,9 @@ temporal: al reiniciar, suspenderse o desplegar de nuevo, se pierden los cambios
 y se vuelve a crear el escenario de demostración. Los datos de la aplicación
 local permanecen separados.
 
-La demo mantiene el acceso sin autenticación acordado: quien tenga el enlace
-puede usar los formularios y registrar llegadas. Usa únicamente datos ficticios.
+Los cambios locales nuevos separan la gestión de buses y las llegadas con
+cuentas de administrador y conductor; configurar ADMIN_PASSWORD y DRIVER_PASSWORD
+antes del futuro despliegue. Ver docs/PERMISOS.md. Usa únicamente datos ficticios.
 La consola H2 y los detalles internos de errores están desactivados en este perfil.
 
 Para conservar cambios entre reinicios hay que acordar almacenamiento persistente:
@@ -50,8 +55,10 @@ configurarse `JDBC_DATABASE_URL=jdbc:h2:file:/ruta/del/disco/intercampus`.
 
 ## Validación y límites
 
-Ejecutar las pruebas del proyecto antes de publicar. El Dockerfile no vuelve a
-correrlas durante el build (`-DskipTests`); usa el resultado de la validación previa.
+Ejecutar las pruebas del proyecto antes de publicar. El Dockerfile ejecuta
+`mvn -B package`, incluyendo las pruebas. Si fallan, no genera la imagen final.
+Mockito utiliza un agente explícito configurado en Maven para evitar depender
+de la adjunción dinámica de agentes dentro del contenedor.
 La construcción de la imagen requiere internet y acceso a Docker; si no están
 disponibles localmente, Render realiza el build y sus logs confirman el resultado.
 Un archivo preparado no implica que el despliegue ya esté publicado.
@@ -66,3 +73,9 @@ empaquetado correctamente y arranque sin HTTP del perfil `render` sobre una base
 temporal completado. El entorno no permite acceso al daemon Docker ni abrir un
 puerto HTTP: la construcción Docker y la comprobación de la URL pública quedan
 pendientes del despliegue real. GitHub y Render todavía no están conectados.
+
+Actualización de permisos: 43 pruebas aprobadas localmente. Configurar en
+Environment las variables ADMIN_PASSWORD y DRIVER_PASSWORD con valores distintos
+y privados antes de desplegar la actualización. El repositorio informado es
+https://github.com/MartinAlejandro007/avance2. No hay publicación confirmada
+de esta actualización desde Codex por falta de conexiones y red.

@@ -11,6 +11,13 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 
 @ControllerAdvice
 public class WebAdvice {
+    @ModelAttribute("canManageFleet")
+    public boolean canManageFleet(HttpServletRequest request) { return request.isUserInRole("ADMIN"); }
+    @ModelAttribute("canConfirmArrivals")
+    public boolean canConfirmArrivals(HttpServletRequest request) { return request.isUserInRole("DRIVER"); }
+    @ModelAttribute("signedIn")
+    public boolean signedIn(HttpServletRequest request) { return request.getUserPrincipal() != null; }
+
     @ModelAttribute("section")
     public String section(HttpServletRequest request) {
         String path = request.getRequestURI();

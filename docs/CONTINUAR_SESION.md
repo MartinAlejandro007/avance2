@@ -1,5 +1,12 @@
 # Continuar CampusUDLATracker en otra sesión
 
+> Instrucción más reciente: el usuario YA autorizó publicar los permisos.
+> Repositorio informado: https://github.com/MartinAlejandro007/avance2.
+> Las conexiones GitHub/Render siguen sin habilitarse al último chequeo; la red
+> del ejecutor no resuelve sus dominios. Los cambios de permisos siguen locales.
+> Validación final: 43 pruebas aprobadas; leer docs/PERMISOS.md. El Dockerfile
+> exige pasar las pruebas antes de desplegar.
+
 ## Objetivo pendiente del usuario
 
 Publicar la aplicación para que los compañeros de grupo puedan verla mediante
@@ -70,3 +77,8 @@ Para abrir localmente: ./iniciar.sh y http://localhost:8080.
 No se pudo verificar el servidor HTTP ni construir la imagen Docker desde el
 entorno restringido: sockets no permitidos y acceso al daemon Docker denegado.
 No declarar el despliegue terminado sin comprobar una URL pública real.
+
+Actualización más reciente: la autorización para publicar sigue vigente.
+Las dependencias ya están disponibles en caché y las 43 pruebas pasaron.
+El archivo actualizacion-permisos.zip permite actualizar GitHub en un solo lote
+pequeño, sin superar 100 archivos. No hay despliegue externo confirmado.

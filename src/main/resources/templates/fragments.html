@@ -11,11 +11,14 @@
 <a th:href="@{/}" th:classappend="${section == 'dashboard'} ? 'selected'"><span class="nav-icon">◫</span> Vista general</a>
 <a th:href="@{/routes}" th:classappend="${section == 'routes'} ? 'selected'"><span class="nav-icon">⌁</span> Rutas y paradas</a>
 <a th:href="@{/fleet}" th:classappend="${section == 'fleet'} ? 'selected'"><span class="nav-icon">▣</span> Flota de buses</a>
-<a th:href="@{/arrivals}" th:classappend="${section == 'arrivals'} ? 'selected'"><span class="nav-icon">✓</span> Registrar llegadas</a>
+<a th:if="${canConfirmArrivals}" th:href="@{/arrivals}" th:classappend="${section == 'arrivals'} ? 'selected'"><span class="nav-icon">✓</span> Registrar llegadas</a>
 <a th:href="@{/alerts}" th:classappend="${section == 'alerts'} ? 'selected'"><span class="nav-icon">◈</span> Centro de alertas</a>
 <div class="nav-caption">MI COMUNIDAD</div>
 <a th:href="@{/profiles}" th:classappend="${section == 'profiles'} ? 'selected'"><span class="nav-icon">♡</span> Perfiles y favoritos</a>
 <a th:href="@{/reports}" th:classappend="${section == 'reports'} ? 'selected'"><span class="nav-icon">▥</span> Reportes</a>
+<a th:if="${signedIn != true}" th:href="@{/login}"><span class="nav-icon">↪</span> Acceso de personal</a>
+<a th:if="${signedIn}" th:href="@{/staff}"><span class="nav-icon">↪</span> Mi panel</a>
+<form th:if="${signedIn}" method="post" th:action="@{/logout}"><button type="submit" class="button secondary full">Cerrar sesión</button></form>
 </nav>
 <div class="sidebar-note"><span class="small-label">CONECTAMOS TU DÍA</span><strong>Un campus más cerca.</strong><p>Planea tu siguiente viaje, desde un solo lugar.</p><span class="note-line"></span></div>
 <div class="sidebar-bottom"><span class="status-dot"></span> Avance 2</div>

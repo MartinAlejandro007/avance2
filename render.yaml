@@ -11,3 +11,7 @@ services:
         value: render
       - key: JAVA_TOOL_OPTIONS
         value: -XX:InitialRAMPercentage=15.0 -XX:MaxRAMPercentage=50.0
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: DRIVER_PASSWORD
+        sync: false
