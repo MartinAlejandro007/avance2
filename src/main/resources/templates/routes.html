@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Rutas y paradas')}"></head>
+<body >
+<a href="#main" class="skip-link">Saltar al contenido</a>
+<aside th:replace="~{fragments :: sidebar}"></aside>
+<div class="workspace"><header th:replace="~{fragments :: topbar('Rutas y paradas')}"></header>
+<main id="main"><div th:replace="~{fragments :: flash}"></div>
+
+<section class="page-intro"><div><span class="eyebrow">CADA CONEXIÓN CUENTA</span><h1>Rutas y paradas<span class="accent">.</span></h1><p>Explora los recorridos y organiza los puntos de encuentro.</p></div><a class="button primary" href="#route-form">+ Nueva ruta</a></section>
+<div class="content-grid"><section><div class="route-grid"><article class="route-card" th:each="route : ${routes}"><span class="route-code" th:text="${route.code}"></span><h2 th:text="${route.name}"></h2><p th:text="${route.stops.size() + ' paradas · Recorrido circular'}"></p><ol class="compact-stops"><li th:each="stop : ${route.stops}" th:text="${stop.name}"></li></ol><div class="actions"><a class="button primary" th:href="@{/routes/{id}(id=${route.id})}">Ver recorrido ↗</a><a class="button quiet" th:href="@{/routes(edit=${route.id})}">Editar</a><form th:action="@{/routes/{id}/delete(id=${route.id})}" method="post" data-confirm="¿Eliminar esta ruta y sus paradas?"><button class="text-danger" type="submit">Eliminar</button></form></div></article></div><div th:if="${routes.isEmpty()}" class="panel empty"><h2>La próxima conexión empieza aquí</h2><p>Crea una ruta y agrega sus paradas en orden.</p></div></section>
+<section class="panel form-panel" id="route-form"><span class="eyebrow">GESTIONAR RECORRIDOS</span><h2 th:text="${editing != null ? 'Editar ruta' : 'Crear una ruta'}"></h2><p class="muted">Agrega las paradas desde el detalle del recorrido.</p><form th:action="${editing != null} ? @{/routes/{id}(id=${editing.id})} : @{/routes}" method="post"><label for="code">Código de ruta</label><input id="code" name="code" required maxlength="40" placeholder="Ej. IC-03" th:value="${editing != null ? editing.code : ''}"><label for="name">Nombre del recorrido</label><input id="name" name="name" required maxlength="150" placeholder="Ej. Conexión Campus Norte" th:value="${editing != null ? editing.name : ''}"><button class="button primary full" type="submit">Guardar ruta</button><a class="cancel" th:if="${editing != null}" th:href="@{/routes}">Cancelar edición</a></form></section></div>
+
+<footer>CampusUDLATracker <span>Proyecto académico · Transporte intercampus UDLA</span></footer>
+</main></div><script th:src="@{/js/app.js}" defer></script>
+</body></html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Centro de alertas')}"></head>
+<body >
+<a href="#main" class="skip-link">Saltar al contenido</a>
+<aside th:replace="~{fragments :: sidebar}"></aside>
+<div class="workspace"><header th:replace="~{fragments :: topbar('Centro de alertas')}"></header>
+<main id="main"><div th:replace="~{fragments :: flash}"></div>
+
+<section class="page-intro"><div><span class="eyebrow">UNA RED BAJO OBSERVACIÓN</span><h1>Centro de alertas<span class="accent">.</span></h1><p>Desvíos de ruta y detenciones prolongadas detectados en la simulación.</p></div><button class="button secondary" type="button" id="refresh-page">Actualizar panel ↻</button></section>
+<div class="notice"><strong>Monitoreo automático.</strong> Las alertas se resuelven cuando la unidad vuelve al recorrido o deja de estar detenida. Las pausas en paradas no generan alertas de detención.</div>
+<section class="panel table-panel"><div class="panel-heading"><h2>Actividad de la red</h2><span class="badge neutral" th:text="${alerts.size() + ' registros'}"></span></div><div class="table-scroll"><table><thead><tr><th>Evento</th><th>Unidad</th><th>Detectado</th><th>Estado</th></tr></thead><tbody><tr th:each="alert : ${alerts}"><td><strong th:text="${alert.type.label}"></strong><span class="table-sub" th:text="${alert.description}"></span></td><td><a th:href="@{/routes/{id}(id=${alert.routeId})}" th:text="${alert.plate}"></a></td><td><time th:datetime="${alert.openedAt}" th:text="${alert.openedAt}" data-local-time></time></td><td><span class="badge" th:classappend="${alert.resolvedAt == null ? 'amber' : 'green'}" th:text="${alert.resolvedAt == null ? 'Activa' : 'Resuelta'}"></span><time class="table-sub" th:if="${alert.resolvedAt != null}" th:datetime="${alert.resolvedAt}" th:text="${alert.resolvedAt}" data-local-time></time></td></tr></tbody></table></div><div class="empty large" th:if="${alerts.isEmpty()}"><span class="empty-icon">✓</span><h2>Sin incidencias registradas</h2><p>Cuando se detecte un desvío o una detención prolongada aparecerá aquí.</p><a class="button secondary" th:href="@{/}">Volver al seguimiento</a></div></section>
+
+<footer>CampusUDLATracker <span>Proyecto académico · Transporte intercampus UDLA</span></footer>
+</main></div><script th:src="@{/js/app.js}" defer></script>
+</body></html>

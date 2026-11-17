@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:fragment="head(title)">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Consulta rutas, paradas y llegadas del transporte intercampus. Demostración con ubicación simulada o declarada.">
+<title th:text="${title} + ' · CampusUDLATracker'">CampusUDLATracker</title>
+<link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}"><link rel="stylesheet" th:href="@{/css/app.css}">
+</head><body>
+<aside th:fragment="sidebar" class="sidebar" id="navigation" aria-label="Navegación principal">
+<a class="brand" th:href="@{/}"><span class="brand-mark">U<span>↗</span></span><span>Campus<span class="brand-sub">UDLA TRACKER</span></span></a>
+<div class="nav-caption">ESPACIO DE MOVILIDAD</div>
+<nav>
+<a th:href="@{/}" th:classappend="${section == 'dashboard'} ? 'selected'"><span class="nav-icon">◫</span> Vista general</a>
+<a th:href="@{/routes}" th:classappend="${section == 'routes'} ? 'selected'"><span class="nav-icon">⌁</span> Rutas y paradas</a>
+<a th:href="@{/fleet}" th:classappend="${section == 'fleet'} ? 'selected'"><span class="nav-icon">▣</span> Flota de buses</a>
+<a th:href="@{/arrivals}" th:classappend="${section == 'arrivals'} ? 'selected'"><span class="nav-icon">✓</span> Registrar llegadas</a>
+<a th:href="@{/alerts}" th:classappend="${section == 'alerts'} ? 'selected'"><span class="nav-icon">◈</span> Centro de alertas</a>
+<div class="nav-caption">MI COMUNIDAD</div>
+<a th:href="@{/profiles}" th:classappend="${section == 'profiles'} ? 'selected'"><span class="nav-icon">♡</span> Perfiles y favoritos</a>
+<a th:href="@{/reports}" th:classappend="${section == 'reports'} ? 'selected'"><span class="nav-icon">▥</span> Reportes</a>
+</nav>
+<div class="sidebar-note"><span class="small-label">CONECTAMOS TU DÍA</span><strong>Un campus más cerca.</strong><p>Planea tu siguiente viaje, desde un solo lugar.</p><span class="note-line"></span></div>
+<div class="sidebar-bottom"><span class="status-dot"></span> Avance 2</div>
+</aside>
+<header th:fragment="topbar(title)" class="topbar"><button class="menu-button" type="button" aria-controls="navigation" aria-expanded="false" aria-label="Abrir navegación">☰</button><div class="breadcrumb">Movilidad <span>/</span> <strong th:text="${title}">Vista general</strong></div><div class="topbar-right"><span class="badge neutral">Rastreo de demostración</span><span class="avatar" aria-label="UDLA">U</span></div></header>
+<div th:fragment="flash"><div class="notice success" role="status" th:if="${success}" th:text="${success}"></div></div>
+<section th:fragment="map(snapshot, routeId)" class="panel map-panel" id="tracking-map" th:attr="data-route-id=${routeId},data-stop-id=${selectedStop}">
+<div class="panel-heading"><div><span class="eyebrow">EXPLORA EL RECORRIDO</span><h2>Conexiones en movimiento</h2></div><span class="badge green" id="connection-status" th:text="${snapshot.simulationEnabled ? 'Simulación activa' : 'Simulación pausada'}">Simulación</span></div>
+<div class="map-toolbar"><label class="sr-only" for="map-route">Ruta del mapa</label><select id="map-route"><option value="">Todas las rutas</option><option th:each="route : ${snapshot.routes}" th:value="${route.id}" th:text="${route.code + ' · ' + route.name}"></option></select><span class="muted">Esquema de demostración</span></div>
+<div class="map-canvas"><svg id="route-map" viewBox="0 0 900 510" role="img" aria-label="Esquema de rutas con paradas y posiciones simuladas de buses"><title>Mapa esquemático del transporte intercampus</title></svg>
+<div class="map-controls"><button type="button" id="zoom-in" aria-label="Acercar mapa">+</button><button type="button" id="zoom-out" aria-label="Alejar mapa">−</button><button type="button" id="zoom-fit" aria-label="Ver todo el recorrido">⌖</button></div>
+<div class="map-tooltip" id="map-tooltip" hidden></div><span class="map-watermark">N ↑ &nbsp; Coordenadas ficticias · Sin cartografía externa</span></div>
+<div class="map-legend"><span><i class="legend-line"></i> Recorrido</span><span><i class="legend-stop"></i> Parada</span><span><i class="legend-bus"></i> Bus activo</span><small id="last-updated">Conectando…</small></div>
+<noscript><p class="notice">Activa JavaScript para ver el esquema dinámico. Las rutas y las paradas también están disponibles en sus listados.</p></noscript>
+<script type="application/json" id="tracking-data" th:inline="javascript">[[${snapshot}]]</script>
+</section>
+<div th:fragment="journey(bus)" class="bus-journey" aria-live="polite">
+<p th:text="${bus.journey.state}"></p><small th:if="${bus.manualControl}">Control manual · Ubicación declarada</small>
+<div th:if="${bus.journey.arrival != null}"><strong th:text="${'Siguiente: ' + bus.journey.nextStopName}"></strong><p><span th:text="${bus.journey.arrival.minutes + ' min aprox. · ' + bus.journey.arrival.meters + ' m'}"></span><small th:if="${bus.journey.arrival.estimatedSpeed}"> · Velocidad de referencia</small></p></div>
+</div>
+</body></html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Vista general')}"></head>
+<body >
+<a href="#main" class="skip-link">Saltar al contenido</a>
+<aside th:replace="~{fragments :: sidebar}"></aside>
+<div class="workspace"><header th:replace="~{fragments :: topbar('Vista general')}"></header>
+<main id="main"><div th:replace="~{fragments :: flash}"></div>
+
+<section class="page-intro"><div><div class="eyebrow">MOVILIDAD QUE TE CONECTA</div><h1>Tu campus, a tiempo<span class="accent">.</span></h1><p>Encuentra tu ruta y sigue tu próximo viaje intercampus.</p></div><a class="button primary" th:href="@{/routes}">Explorar rutas <span>↗</span></a></section>
+<div class="demo-banner"><span class="banner-icon">◉</span><div><strong>Así se mueve nuestra comunidad</strong><span>Posiciones simuladas o declaradas al registrar llegadas. Sin conexión a GPS real.</span></div><span class="badge neutral">DEMO ACADÉMICA</span></div>
+<section class="stats" aria-label="Resumen de movilidad">
+<article class="stat-card"><span class="stat-icon burgundy">▣</span><span class="stat-label">Buses activos</span><strong data-stat="active" th:text="${activeCount}">0</strong><small>Unidades en circulación simulada</small></article>
+<article class="stat-card"><span class="stat-icon blue">⌁</span><span class="stat-label">Rutas disponibles</span><strong data-stat="routes" th:text="${snapshot.routes.size()}">0</strong><small>Conexiones entre nuestros campus</small></article>
+<article class="stat-card"><span class="stat-icon green">⌖</span><span class="stat-label">Paradas del recorrido</span><strong data-stat="stops" th:text="${stopCount}">0</strong><small>Puntos para empezar tu viaje</small></article>
+<article class="stat-card"><span class="stat-icon amber">◈</span><span class="stat-label">Alertas activas</span><strong data-stat="alerts" th:text="${alertCount}">0</strong><small><a th:href="@{/alerts}">Consultar centro de alertas →</a></small></article>
+</section>
+<div class="dashboard-grid"><div th:replace="~{fragments :: map(${snapshot}, null)}"></div>
+<section class="panel live-panel"><div class="panel-heading"><div><span class="eyebrow">TU SIGUIENTE VIAJE</span><h2>Buses en la red</h2></div><span class="live-dot" aria-label="Actualización automática"></span></div>
+<div id="live-buses" class="live-buses"><article th:each="bus : ${snapshot.buses}" class="bus-card"><div class="bus-card-top"><strong th:text="${bus.plate}"></strong><span class="badge" th:classappend="${bus.status.name() == 'ACTIVE'} ? 'green' : 'neutral'" th:text="${bus.status.label}"></span></div><div th:replace="~{fragments :: journey(${bus})}"></div><div class="bus-card-bottom"><span th:text="${bus.position.speedKmh + ' km/h'}"></span><a th:href="@{/routes/{id}(id=${bus.routeId})}">Ver recorrido ↗</a></div></article></div>
+<p class="panel-footnote">La ubicación se actualiza automáticamente. El tiempo de llegada es una estimación.</p></section></div>
+<section class="section-block"><div class="section-title"><div><span class="eyebrow">ELIGE TU CONEXIÓN</span><h2>Un recorrido para tu día</h2></div><a th:href="@{/routes}">Todas las rutas →</a></div><div class="route-grid"><a th:each="route : ${snapshot.routes}" th:href="@{/routes/{id}(id=${route.id})}" class="route-card"><span class="route-code" th:text="${route.code}"></span><span class="route-card-arrow">↗</span><h3 th:text="${route.name}"></h3><p th:text="${route.stops.size() + ' paradas · Recorrido circular'}"></p><div class="mini-route"><i></i><span></span><i></i><span></span><i></i></div><span class="route-link">Consultar paradas y llegadas →</span></a></div><div class="empty" th:if="${snapshot.routes.isEmpty()}">Todavía no hay rutas. <a th:href="@{/routes}">Crea la primera conexión.</a></div></section>
+
+<footer>CampusUDLATracker <span>Proyecto académico · Transporte intercampus UDLA</span></footer>
+</main></div><script th:src="@{/js/app.js}" defer></script>
+</body></html>

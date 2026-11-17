@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Registrar llegadas')}"></head>
+<body>
+<a href="#main" class="skip-link">Saltar al contenido</a>
+<aside th:replace="~{fragments :: sidebar}"></aside>
+<div class="workspace"><header th:replace="~{fragments :: topbar('Registrar llegadas')}"></header>
+<main id="main"><div th:replace="~{fragments :: flash}"></div>
+<section class="page-intro"><div><span class="eyebrow">PANEL DEL CONDUCTOR</span><h1>Registrar llegadas<span class="accent">.</span></h1><p>Selecciona tu bus y confirma la llegada a cada campus en el orden del recorrido.</p></div><button type="button" class="button secondary" id="refresh-page">Actualizar panel ↻</button></section>
+<div class="route-grid">
+<section th:each="bus : ${buses}" class="panel form-panel">
+<div class="bus-card-top"><h2 th:text="${bus.plate}"></h2><span class="badge" th:classappend="${bus.manualControl ? 'green' : 'neutral'}" th:text="${bus.manualControl ? 'Control manual' : 'Automático'}"></span></div>
+<p th:text="${bus.status.label}"></p>
+<div th:replace="~{fragments :: journey(${bus})}"></div>
+<form th:if="${bus.manualControl and bus.journey.arrival != null}" method="post" th:action="@{/arrivals/{id}(id=${bus.id})}" data-confirm="¿Confirmar que este bus llegó al campus indicado?">
+<input type="hidden" name="stopId" th:value="${bus.journey.arrival.stopId}">
+<button type="submit" class="button primary full" th:text="${'Llegué a ' + bus.journey.nextStopName}"></button>
+</form>
+<form th:if="${bus.manualControl or (bus.status.name() == 'ACTIVE' and bus.journey.arrival != null)}" method="post" th:action="@{/arrivals/{id}/control(id=${bus.id})}">
+<input type="hidden" name="manual" th:value="${!bus.manualControl}">
+<button type="submit" class="button secondary full" th:text="${bus.manualControl ? 'Volver a simulación automática' : 'Activar control manual'}"></button>
+</form>
+<p class="form-hint" th:text="${bus.manualControl ? 'La simulación de este bus está pausada. Cada confirmación guarda la hora y actualiza el siguiente campus.' : 'Activa el control manual antes de registrar una llegada.'}"></p>
+</section></div>
+<p class="empty" th:if="${buses.isEmpty()}">No hay buses registrados. <a th:href="@{/fleet}">Consulta la flota.</a></p>
+<section class="panel table-panel section-block"><div class="panel-heading"><div><span class="eyebrow">CONTROL DE LLEGADAS</span><h2>Últimas confirmaciones</h2></div><span class="badge neutral">Hasta 30 registros</span></div>
+<div class="table-scroll" th:if="${!confirmations.isEmpty()}"><table><thead><tr><th>Bus</th><th>Campus</th><th>Fecha y hora de Ecuador</th></tr></thead><tbody><tr th:each="arrival : ${confirmations}"><td th:text="${arrival.busPlate}"></td><td th:text="${arrival.stopName}"></td><td><time data-local-time th:datetime="${arrival.moment}" th:text="${#temporals.format(arrival.moment.atZone(T(java.time.ZoneId).of('America/Guayaquil')), 'dd/MM/yyyy HH:mm:ss')}"></time></td></tr></tbody></table></div>
+<p class="empty" th:if="${confirmations.isEmpty()}">Todavía no hay llegadas confirmadas por conductores.</p>
+</section>
+<p class="methodology">La hora se guarda al confirmar. La ubicación corresponde al campus declarado; no se verifica con GPS. Los tiempos al siguiente campus siguen siendo estimaciones. Estas llegadas se incluyen en los reportes junto con las simuladas.</p>
+<footer>CampusUDLATracker <span>Proyecto académico · Transporte intercampus UDLA</span></footer>
+</main></div><script th:src="@{/js/app.js}" defer></script>
+</body></html>

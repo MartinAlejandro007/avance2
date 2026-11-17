@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Perfiles y favoritos')}"></head>
+<body >
+<a href="#main" class="skip-link">Saltar al contenido</a>
+<aside th:replace="~{fragments :: sidebar}"></aside>
+<div class="workspace"><header th:replace="~{fragments :: topbar('Perfiles y favoritos')}"></header>
+<main id="main"><div th:replace="~{fragments :: flash}"></div>
+
+<section class="page-intro"><div><span class="eyebrow">TU FORMA DE MOVERTE</span><h1>Perfiles y favoritos<span class="accent">.</span></h1><p>Guarda tus conexiones habituales y personaliza tu experiencia.</p></div><a class="button primary" href="#profile-form">+ Crear perfil</a></section>
+<div class="notice">Selección de perfiles para demostración. Esta versión todavía no incluye inicio de sesión.</div>
+<div class="content-grid"><section class="profile-grid"><article class="panel profile-card" th:each="user : ${users}"><span class="profile-avatar" th:text="${#strings.substring(user.name, 0, 1)}"></span><h2 th:text="${user.name}"></h2><p th:text="${user.email}"></p><span class="badge neutral" th:text="${user.type.name() == 'STUDENT' ? 'Estudiante' : user.type.name() == 'TEACHER' ? 'Docente' : 'Administrativo'}"></span><div class="actions"><a class="button primary" th:href="@{/profiles/{id}(id=${user.id})}">Mis favoritos ♡</a><a th:href="@{/profiles(edit=${user.id})}">Editar</a><form th:action="@{/profiles/{id}/delete(id=${user.id})}" method="post" data-confirm="¿Eliminar este perfil y sus favoritos?"><button type="submit" class="text-danger">Eliminar</button></form></div></article><div class="panel empty" th:if="${users.isEmpty()}"><h2>Tu próximo viaje empieza contigo</h2><p>Crea un perfil para guardar rutas y paradas favoritas.</p></div></section>
+<section class="panel form-panel" id="profile-form"><span class="eyebrow">MI COMUNIDAD</span><h2 th:text="${editing != null ? 'Editar perfil' : 'Crear perfil'}"></h2><form th:action="${editing != null} ? @{/profiles/{id}(id=${editing.id})} : @{/profiles}" method="post"><label for="name">Nombre completo</label><input id="name" name="name" required maxlength="150" th:value="${editing != null ? editing.name : ''}"><label for="email">Correo institucional</label><input id="email" name="email" type="email" required maxlength="200" placeholder="nombre@udla.edu.ec" th:value="${editing != null ? editing.email : ''}"><label for="type">Soy parte de la UDLA como</label><select id="type" name="type" required><option th:each="type : ${types}" th:value="${type}" th:selected="${editing != null and editing.type == type}" th:text="${type.name() == 'STUDENT' ? 'Estudiante' : type.name() == 'TEACHER' ? 'Docente' : 'Administrativo'}"></option></select><button class="button primary full" type="submit">Guardar perfil</button><a class="cancel" th:if="${editing != null}" th:href="@{/profiles}">Cancelar edición</a></form></section></div>
+
+<footer>CampusUDLATracker <span>Proyecto académico · Transporte intercampus UDLA</span></footer>
+</main></div><script th:src="@{/js/app.js}" defer></script>
+</body></html>
