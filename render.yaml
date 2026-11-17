@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: campus-udla-tracker
+    runtime: docker
+    plan: free
+    numInstances: 1
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /favicon.svg
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
+      - key: JAVA_TOOL_OPTIONS
+        value: -XX:InitialRAMPercentage=15.0 -XX:MaxRAMPercentage=50.0
